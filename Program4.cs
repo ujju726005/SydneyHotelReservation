@@ -4,92 +4,93 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleApplication
+namespace SydneyHotel
 {
     class Program
     {
+        class ReservationDetail
+        {
+            public string customerName { get; set; }
+            public int nights { get; set; }
+            public string roomService { get; set; }
+            public double totalPrice { get; set; }
+
+        }
+        // calulation of room services
+        //Pujan Budathoki
+        static double Price(int night, string isRoomService)
+        {
+            double price = 0;
+            if ((night > 0) && (night <= 3))
+                price = 100 * night;
+            else if ((night > 3) && (night <= 10))
+                price = 80.5 * night;
+            else if ((night > 10) && (night <= 20))
+                price = 75.3 * night;
+            //roomservice should be checked to lower yes
+            if (isRoomService.ToLower() == "yes")
+                return price + price * 0.1;
+            else
+                return price;
+
+        }
         static void Main(string[] args)
         {
-            char choice;
+            // First change: Added welcome message here
+            Console.WriteLine("Welcome to your hotel reservation system!");
 
-            // Keep The Loop Running Until The Choice Is y/Y
-            do
+            Console.WriteLine(".................Welcome to Sydney Hotel...............");
+
+            Console.Write("\nEnter no. of Customer: ");
+            int n = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("\n--------------------------------------------------------------------\n");
+
+            ReservationDetail[] rd = new ReservationDetail[n];
+
+            for (int i = 0; i < n; i++)
             {
+                rd[i] = new ReservationDetail();
+                Console.Write("Enter customer name: ");
+                rd[i].customerName = Console.ReadLine();
 
-                // Input Customer Name
-                Console.Write("Enter Customer Name: ");
-                string customerName = Console.ReadLine();
-
-                // Input Number Of Coffee Bags
-                Console.Write("Enter Number Of Coffee Bags (1-200): ");
-                int numCoffeeBags = Int32.Parse(Console.ReadLine());
-
-                // Keep Re-Entering Number Of Coffee Bags
-                // If Until User Enters Invalid Value
-                while (numCoffeeBags < 1 || numCoffeeBags > 200)
+                Console.Write("Enter the number of nights: ");
+                rd[i].nights = Convert.ToInt32(Console.ReadLine());
+                if (!(rd[i].nights > 0) && (rd[i].nights <= 20))
                 {
-                    Console.WriteLine("Value Must Be Between 1 And 200!");
-                    Console.Write("Re-Enter Number Of Coffee Bags (1-200): ");
-                    numCoffeeBags = Int32.Parse(Console.ReadLine());
+                    Console.Write("Number of nights in between 1 to 20: ");
+
+                    Console.Write("Enter the number of nights: ");
+                    rd[i].nights = Convert.ToInt32(Console.ReadLine());
                 }
 
-                // Input If The Customer Is A Reseller
-                Console.Write("Is Customer A Reseller? (y/Y For Yes): ");
-                choice = Console.ReadLine().ToLower()[0];
-                bool isReseller = false;
-                if (choice == 'y')
-                {
-                    isReseller = true;
-                }
+                Console.Write("Enter yes/no to indicate wheather you want ta room service: ");
+                rd[i].roomService = Console.ReadLine();
 
+                rd[i].totalPrice = Price(rd[i].nights, rd[i].roomService);
+                Console.WriteLine($"The total price from {rd[i].customerName} is ${rd[i].totalPrice}");
+                Console.WriteLine("\n--------------------------------------------------------------------");
 
-                // Compute Bill
+            }
 
-                // Compute Bag Cost
-                double totalCost = 0.0;
-                if (numCoffeeBags < 6)
-                {
-                    totalCost += numCoffeeBags * 36;
-                }
-                else if (numCoffeeBags < 16)
-                {
-                    totalCost += numCoffeeBags * 34.5;
-                }
-                else
-                {
-                    totalCost += numCoffeeBags * 32.7;
-                }
+            var (minPrice, minindex) = rd.Select(x => x.totalPrice).Select((m, i) => (m, i)).Min();
+            var (maxPrice, maxindex) = rd.Select(x => x.totalPrice).Select((m, i) => (m, i)).Max();
 
-                // Compute Discount
-                double discount = 0.0;
+            ReservationDetail maxrd = rd[maxindex];
+            ReservationDetail minrd = rd[minindex];
 
-                if (isReseller)
-                {
-                    discount = totalCost * 0.20;
-                }
+            Console.WriteLine("\n\t\t\t\tSummary of reservation");
+            Console.WriteLine("--------------------------------------------------------------------\n");
+            Console.WriteLine("Name\t\tNumber of nights\t\tRoom service\t\tCharge");
+            Console.WriteLine($"{minrd.customerName}\t\t\t{minrd.nights}\t\t\t{minrd.roomService}\t\t\t{minrd.totalPrice}");
+            Console.WriteLine($"{maxrd.customerName}\t\t{maxrd.nights}\t\t\t{maxrd.roomService}\t\t\t{maxrd.totalPrice}");
+            Console.WriteLine("\n--------------------------------------------------------------------\n");
+            Console.WriteLine($"The customer spending most is {maxrd.customerName} ${maxrd.totalPrice}");
+            Console.WriteLine($"The customer spending least is {minrd.customerName} ${minrd.totalPrice}");
 
-                // Print Bill
-                Console.WriteLine();
-                Console.WriteLine("--------------------------------------------");
-                Console.WriteLine("------------------- BILL -------------------");
-                Console.WriteLine("--------------------------------------------");
-                Console.WriteLine("Customer Name: {0}", customerName);
-                Console.WriteLine("Number Of Coffee Bags: {0}", numCoffeeBags);
-                Console.WriteLine("Total Cost Of Bags: {0:C}", totalCost);
-                Console.WriteLine("Discount: {0:C}", discount);
-                Console.WriteLine("--------------------------------------------");
-                Console.WriteLine("Amount Payable: {0:C}", totalCost - discount);
-                Console.WriteLine("--------------------------------------------");
+            // Second change: Fixed typo here
+            Console.WriteLine($"Press any key to continue....");
+            Console.ReadLine();
 
-
-
-                // Input User Choice
-                Console.Write("Input Y/y To Continue Or Any Other Key To Exit: ");
-
-                // Get First Letter Of Choice
-                choice = Console.ReadLine().ToLower()[0];
-                Console.WriteLine();
-            } while (choice == 'y');
         }
     }
 }
