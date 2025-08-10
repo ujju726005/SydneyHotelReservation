@@ -16,8 +16,8 @@ namespace SydneyHotel
             public double totalPrice { get; set; }
 
         }
-        // calulation of room services
-        //Pujan Budathoki
+        // calculation of room services
+        // Pujan Budathoki
         static double Price(int night, string isRoomService)
         {
             double price = 0;
@@ -27,7 +27,7 @@ namespace SydneyHotel
                 price = 80.5 * night;
             else if ((night > 10) && (night <= 20))
                 price = 75.3 * night;
-            //roomservice should be checked to lower yes
+            // roomservice should be checked to lower yes
             if (isRoomService.ToLower() == "yes")
                 return price + price * 0.1;
             else
@@ -63,11 +63,18 @@ namespace SydneyHotel
                     rd[i].nights = Convert.ToInt32(Console.ReadLine());
                 }
 
-                Console.Write("Enter yes/no to indicate wheather you want ta room service: ");
+                Console.Write("Enter yes/no to indicate whether you want room service: ");
                 rd[i].roomService = Console.ReadLine();
 
                 rd[i].totalPrice = Price(rd[i].nights, rd[i].roomService);
-                Console.WriteLine($"The total price from {rd[i].customerName} is ${rd[i].totalPrice}");
+
+                // Second change: Apply 10% discount if nights > 10
+                if (rd[i].nights > 10)
+                {
+                    rd[i].totalPrice *= 0.9; // 10% discount
+                }
+
+                Console.WriteLine($"The total price from {rd[i].customerName} is ${rd[i].totalPrice:F2}");
                 Console.WriteLine("\n--------------------------------------------------------------------");
 
             }
@@ -81,14 +88,14 @@ namespace SydneyHotel
             Console.WriteLine("\n\t\t\t\tSummary of reservation");
             Console.WriteLine("--------------------------------------------------------------------\n");
             Console.WriteLine("Name\t\tNumber of nights\t\tRoom service\t\tCharge");
-            Console.WriteLine($"{minrd.customerName}\t\t\t{minrd.nights}\t\t\t{minrd.roomService}\t\t\t{minrd.totalPrice}");
-            Console.WriteLine($"{maxrd.customerName}\t\t{maxrd.nights}\t\t\t{maxrd.roomService}\t\t\t{maxrd.totalPrice}");
+            Console.WriteLine($"{minrd.customerName}\t\t\t{minrd.nights}\t\t\t{minrd.roomService}\t\t\t{minrd.totalPrice:F2}");
+            Console.WriteLine($"{maxrd.customerName}\t\t{maxrd.nights}\t\t\t{maxrd.roomService}\t\t\t{maxrd.totalPrice:F2}");
             Console.WriteLine("\n--------------------------------------------------------------------\n");
-            Console.WriteLine($"The customer spending most is {maxrd.customerName} ${maxrd.totalPrice}");
-            Console.WriteLine($"The customer spending least is {minrd.customerName} ${minrd.totalPrice}");
+            Console.WriteLine($"The customer spending most is {maxrd.customerName} ${maxrd.totalPrice:F2}");
+            Console.WriteLine($"The customer spending least is {minrd.customerName} ${minrd.totalPrice:F2}");
 
-            // Second change: Fixed typo here
-            Console.WriteLine($"Press any key to continue....");
+            // Fixed typo here
+            Console.WriteLine("Press any key to continue....");
             Console.ReadLine();
 
         }
