@@ -36,9 +36,7 @@ namespace SydneyHotel
         }
         static void Main(string[] args)
         {
-            // First change: Added welcome message here
             Console.WriteLine("Welcome to your hotel reservation system!");
-
             Console.WriteLine(".................Welcome to Sydney Hotel...............");
 
             Console.Write("\nEnter no. of Customer: ");
@@ -58,7 +56,6 @@ namespace SydneyHotel
                 if (!(rd[i].nights > 0) && (rd[i].nights <= 20))
                 {
                     Console.Write("Number of nights in between 1 to 20: ");
-
                     Console.Write("Enter the number of nights: ");
                     rd[i].nights = Convert.ToInt32(Console.ReadLine());
                 }
@@ -66,9 +63,10 @@ namespace SydneyHotel
                 Console.Write("Enter yes/no to indicate whether you want room service: ");
                 rd[i].roomService = Console.ReadLine();
 
+                // Calculate total price including discount and room service
                 rd[i].totalPrice = Price(rd[i].nights, rd[i].roomService);
 
-                // Second change: Apply 10% discount if nights > 10
+                // Apply 10% discount if nights > 10
                 if (rd[i].nights > 10)
                 {
                     rd[i].totalPrice *= 0.9; // 10% discount
@@ -76,7 +74,6 @@ namespace SydneyHotel
 
                 Console.WriteLine($"The total price from {rd[i].customerName} is ${rd[i].totalPrice:F2}");
                 Console.WriteLine("\n--------------------------------------------------------------------");
-
             }
 
             var (minPrice, minindex) = rd.Select(x => x.totalPrice).Select((m, i) => (m, i)).Min();
@@ -94,10 +91,8 @@ namespace SydneyHotel
             Console.WriteLine($"The customer spending most is {maxrd.customerName} ${maxrd.totalPrice:F2}");
             Console.WriteLine($"The customer spending least is {minrd.customerName} ${minrd.totalPrice:F2}");
 
-            // Fixed typo here
             Console.WriteLine("Press any key to continue....");
             Console.ReadLine();
-
         }
     }
 }
